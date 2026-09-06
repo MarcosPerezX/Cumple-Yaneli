@@ -407,7 +407,7 @@ main{ position:relative; z-index:10; }
       <span class="faltan" id="faltan">—</span>
     </div>
     <div class="mandos oculto-pre" id="mandos">
-      <!--<button class="boton viva" id="btnMusica" type="button"><span class="pip"></span>Poner la música</button>-->
+      <button class="boton viva" id="btnMusica" type="button"><span class="pip"></span>Poner la música</button>
       <button class="boton" id="btnRepetir" type="button">Repetir la toma</button>
     </div>
     <p class="plomo oculto-pre" id="pieHero">Baja despacio: quedan seis tomas más, y en una de ellas hay siete velas esperando que las apagues.</p>
@@ -754,13 +754,27 @@ main{ position:relative; z-index:10; }
     const base = a.currentTime + .06;
     BAJO.forEach(([b,n]) => voz(NOTA[n], base + b * BEAT, BEAT * 2.6, 'sine', .1));
   }
-  function musica(on){
-    tocando = on; $('#btnMusica').classList.toggle('sonando', on);
+function musica(on){
+    tocando = on;
+
+    $('#btnMusica').toggleClass('sonando', on);
     $('#btnMusica').lastChild.textContent = on ? 'Quitar la música' : 'Poner la música';
+
     clearInterval(tmr);
-    if(!on) return;
-    try{ ctx().resume(); pasada(); tmr = setInterval(pasada, (LARGO + 1.4) * 1000); }catch(e){}
-  }
+
+    if(!on) {
+        $('#btnMusica').show();
+        return;
+    }
+
+    $('#btnMusica').hide();
+
+    try {
+        ctx().resume();
+        pasada();
+        tmr = setInterval(pasada, (LARGO + 1.4) * 1000);
+    } catch(e){}
+}
 
   /* ═══ CONFETI ═══ */
   const cv = $('#fx'), cx2 = cv.getContext('2d');
